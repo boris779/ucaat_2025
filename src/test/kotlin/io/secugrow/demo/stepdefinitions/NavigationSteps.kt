@@ -9,6 +9,7 @@ class NavigationSteps(testDataContainer: TestDataContainer) : AbstractStepDefs(t
     init {
         Given("the start page is loaded") {
             getWebDriverSession().gotoUrl(PageUrls.HOME, MainPage::class, testDataContainer)
+            getPage(MainPage::class).acceptCookies()
         }
 
 

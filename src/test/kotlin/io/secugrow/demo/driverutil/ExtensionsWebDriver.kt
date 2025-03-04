@@ -1,5 +1,6 @@
 package io.secugrow.demo.driverutil
 
+import org.openqa.selenium.Platform
 import org.openqa.selenium.remote.RemoteWebDriver
 
 fun RemoteWebDriver.getBrowserName(): String {
@@ -10,6 +11,9 @@ fun RemoteWebDriver.getBrowserName(): String {
 fun RemoteWebDriver.isMobile(): Boolean {
 
     val caps = this.capabilities
+
+    caps.platformName.let { if (it == Platform.ANDROID) return true }
+    caps.platformName.let { if (it == Platform.IOS) return true }
 
     if (caps.browserVersion.contains("mobile")) {
         return true

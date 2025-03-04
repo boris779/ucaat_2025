@@ -10,7 +10,14 @@ open class MainPage(session: WebDriverSession) : AbstractPage(session) {
     var contentTab = lazy { wdwait.until(ExpectedConditions.presenceOfElementLocated(By.id("pane-$id"))) }
 
     fun switchTabWithText(tabname: String): MainPage {
-        wdwait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-toggle='tab'][text()='$tabname']")))
+
+
+        val locator = when  (session.isMobile()) {
+            true -> By.xpath("//a[@data-toggle='collapse'][contains(text(),'$tabname')]")
+            false ->By.xpath("//a[@data-toggle='tab'][text()='$tabname']")
+        }
+
+        wdwait.until(ExpectedConditions.elementToBeClickable(locator))
             .click()
         id = Tabs.entries.first { it.title == tabname }.id
 
@@ -24,5 +31,9 @@ open class MainPage(session: WebDriverSession) : AbstractPage(session) {
         }
 
 
+    }
+
+    fun acceptCookies() {
+        wdwait.until(ExpectedConditions.elementToBeClickable(By.id("continue_button"))).click()
     }
 }
