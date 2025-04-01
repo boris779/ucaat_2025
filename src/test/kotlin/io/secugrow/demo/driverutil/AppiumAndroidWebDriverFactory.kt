@@ -5,27 +5,10 @@ import io.appium.java_client.android.options.UiAutomator2Options
 import org.assertj.core.api.Assertions.fail
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriverException
-import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.manager.SeleniumManager
 import java.net.URI
 
 class AppiumAndroidWebDriverFactory : RemoteWebDriverFactory() {
     override fun createDriver(): WebDriver {
-
-        // Create ChromeOptions for DevTools
-//        val chromeOptions = ChromeOptions()
-//        chromeOptions.addArguments("--disable-extensions")
-//        chromeOptions.addArguments("--no-sandbox")
-//        chromeOptions.setExperimentalOption("w3c", false) // Important for Appium support
-//
-//        caps.setCapability("platformName", "Android")
-//        caps.setCapability("deviceName", "Appium_Android_Device")
-//        caps.setCapability("automationName", "UiAutomator2")
-//        caps.setCapability("browserName", "chrome")
-//        caps.setCapability("udid", getMobileDeviceId())
-//        caps.setCapability("noReset", true)
-//        caps.setCapability("appium:chromeOptions", chromeOptions)
-
 
         val uiAutomator2Options = UiAutomator2Options()
         uiAutomator2Options.setUdid(getMobileDeviceId())
@@ -35,11 +18,12 @@ class AppiumAndroidWebDriverFactory : RemoteWebDriverFactory() {
         uiAutomator2Options.withBrowserName("chrome")
 
         uiAutomator2Options.setNoReset(true)
-        uiAutomator2Options.setCapability("chromeOptions", mapOf(
-            "args" to listOf("--disable-extensions", "--no-sandbox"),
-            "w3c" to false
-        ))
-
+        uiAutomator2Options.setCapability(
+            "chromeOptions", mapOf(
+                "args" to listOf("--disable-extensions", "--no-sandbox"),
+                "w3c" to false
+            )
+        )
 
 
 //        caps.setCapability("appium:chromedriverExecutable", webDriverManager.downloadedDriverPath)
@@ -50,7 +34,7 @@ class AppiumAndroidWebDriverFactory : RemoteWebDriverFactory() {
             webDriver = AndroidDriver(appiumServer, uiAutomator2Options)
 
         } catch (e: WebDriverException) {
-            fail("Appium error: $appiumServer  exception message: ${ e.localizedMessage} ::: Appium started?")
+            fail("Appium error: $appiumServer  exception message: ${e.localizedMessage} ::: Appium started?")
         }
         return webDriver
     }
